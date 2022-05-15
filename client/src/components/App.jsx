@@ -1,8 +1,8 @@
-import './App.css';
 import React, {useState} from 'react';
 import Login from "./Login";
 import Dashboard from './Dashboard';
 import useLocalStorage from '../customHooks/useLocalStorage';
+import ContactsProvider from './contexts/ContactsProvider';
 
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
   console.log(id); 
   return (
     <div className="App">
-      {id ? <Dashboard id={id}/> : <Login onIdSubmit = {setId}/>}
+      {id ? <ContactsProvider><Dashboard id={id}/></ContactsProvider>: <Login onIdSubmit = {setId}/>}
     </div>
   );
 }
