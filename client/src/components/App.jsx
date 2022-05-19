@@ -3,6 +3,7 @@ import Login from "./Login";
 import Dashboard from './Dashboard';
 import useLocalStorage from '../customHooks/useLocalStorage';
 import ContactsProvider from './contexts/ContactsProvider';
+import ConversationProvider from './contexts/ConversationProvider';
 
 
 function App() {
@@ -11,7 +12,14 @@ function App() {
   console.log(id); 
   return (
     <div className="App">
-      {id ? <ContactsProvider><Dashboard id={id}/></ContactsProvider>: <Login onIdSubmit = {setId}/>}
+      {id ? <ContactsProvider>
+              <ConversationProvider id={id}>
+                <Dashboard id={id}/>
+              </ConversationProvider>
+            </ContactsProvider>
+          : 
+            <Login onIdSubmit = {setId}/>
+      }
     </div>
   );
 }

@@ -15,7 +15,7 @@ export default function useLocalStorage(key, initialValue) {
         const jsonVal = localStorage.getItem(prefixKey);
         //every return below are all for set the value [value, setValue] initially
         if (jsonVal != null){
-            return JSON.parse(JSON.stringify(jsonVal));         
+            return JSON.parse(jsonVal);         
         }
         //passing function to initialValue (useState(()=>{})) 
         if (typeof(initialValue) === "function"){
@@ -29,7 +29,8 @@ export default function useLocalStorage(key, initialValue) {
     useEffect(()=>{
         //set the value you want to store to localStorage
         if (value){
-            localStorage.setItem(prefixKey, value);
+            //stringify here to make JS becomes JSON data
+            localStorage.setItem(prefixKey, JSON.stringify(value));
         }
     }, [prefixKey,value])
 

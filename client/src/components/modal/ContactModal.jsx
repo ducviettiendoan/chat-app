@@ -1,7 +1,6 @@
 import React, {useRef} from 'react';
 import { Form, Modal, Button } from 'react-bootstrap';
 import { useContacts } from '../contexts/ContactsProvider';
-import ContactsProvider from '../contexts/ContactsProvider';
 
 export default function ContactModal({closeShow}) {
 
@@ -9,7 +8,6 @@ export default function ContactModal({closeShow}) {
     const nameRef = useRef();
     //value of ContactContext.Provider is an obj => createContext is an obj
     const createContext = useContacts();
-    console.log(createContext);
 
     const createNewContact = (e) => {
         e.preventDefault();
