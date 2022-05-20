@@ -15,7 +15,7 @@ export default function Sidebar(props) {
   const closeShow = () => setShow(false);
 
   return (
-      <div style={{"border-right": '1px solid black'}}>
+      <div className='d-flex flex-column' style={{"border-right": '1px solid black'}}>
           <Tab.Container activeKey={selectTab} onSelect = {setTab}>
               <Nav variant='tabs'>
                   <Nav.Item>
@@ -26,7 +26,7 @@ export default function Sidebar(props) {
                   </Nav.Item>
               </Nav>
               {/* Content of the whole Tab (inside Tab Container) */}
-              <Tab.Content className='p-2'>
+              <Tab.Content className='p-2 overflow-auto'>
                   {/* Normally the content of that linked to the Nave Link tương ứng trg Tab Container */}
                 <Tab.Pane eventKey = {CONVERSATION}>
                     <Conversations/>
@@ -34,7 +34,7 @@ export default function Sidebar(props) {
                 <Tab.Pane eventKey = {CONTACTS}>
                     <Contact/>  
                 </Tab.Pane>
-                <div className='d-flex flex-column justify-content-end' style={{height: "80vh"}}>
+                <div className='d-flex flex-column justify-content-end' style={{height:'80vh'}}>
                     <div className='border-top'>Your Id:</div>
                     <div>{props.id}</div>
                 </div>

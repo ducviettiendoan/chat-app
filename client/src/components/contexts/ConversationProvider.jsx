@@ -41,9 +41,10 @@ export default function ConversationProvider({id, children}) {
             const fromMe = (mes.sender === id);
             return {...mes, senderName: name, fromMe};
         })
-
+        //update old form message to new formatMessage
+        conver.message = formatMessage;
         let selected = (index === selectedConversationIndex);
-        return {...conver, recipient, selected, formatMessage};
+        return {...conver, recipient, selected};
     });
 
     //ultility:

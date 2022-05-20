@@ -6,9 +6,9 @@ import { useConversation } from './contexts/ConversationProvider';
 export default function Dashboard(props) {
   const conversation = useConversation();
   return (
-      <div className='d-flex'>
+      <div className='d-flex' style={{height: '100vh'}}>
           <Sidebar id = {props.id}/>
-          {conversation && conversation.selectedConversation.selected ? 
+          {conversation ? 
           <CurrentConversation conver={conversation.selectedConversation}/> 
           : 
           <div>Not found Conversation</div>}
