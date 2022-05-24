@@ -2,7 +2,7 @@
 // const app = express();
 // const http = require('http');
 // const server = http.createServer(app);
-const io = require("socket.io")(5000,
+const io = require("socket.io")("https://ducdoanchatapp.web.app",
     { 
     cors: {    
       origin: "*",    
