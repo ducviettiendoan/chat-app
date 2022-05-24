@@ -15,6 +15,7 @@ export default function CurrentConversation(props) {
         console.log(textMessage);
         e.preventDefault();
         if (textMessage.trim().length > 0){
+            console.log(cons.selectedConversation.recipient.map((user)=> {return user.id}));
             cons.sendMessage(cons.selectedConversation.recipient.map((user)=> {return user.id}), textMessage);
             setNewMessage(prev => !prev);
             console.log("Sent");
@@ -23,7 +24,9 @@ export default function CurrentConversation(props) {
     }
     
     useEffect(()=>{
-        if (latestMessage){
+        console.log(latestMessage);
+        if (!latestMessage.current) return;
+        if (latestMessage.current){
             latestMessage.current.scrollIntoView();
         }
     },[newMessage]);
@@ -34,7 +37,7 @@ export default function CurrentConversation(props) {
             <div className='overflow-auto'>
                 <div className="flex-grow-1 d-flex">
                     <div className="flex-column align-items-start justify-content-end px-3 flex-grow-1">
-                        {cons.selectedConversation.message.map((mes, index) => {
+                        {cons.selectedConversation && cons.selectedConversation.message.map((mes, index) => {
                             const newMessage = cons.selectedConversation.message.length - 1 === index;
                             return (
                                 <div 

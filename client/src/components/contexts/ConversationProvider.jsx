@@ -1,6 +1,7 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useCallback} from 'react';
 import useLocalStorage from '../../customHooks/useLocalStorage';
 import { useContacts } from './ContactsProvider';
+import { useSocket } from '../SocketProvider';
 
 const ConversationContext = React.createContext();
 
@@ -16,19 +17,24 @@ export default function ConversationProvider({id, children}) {
     const createConversation = (selectedUser) => {
         setConversations(prev => [...prev, {selectedUser, message: []}]);
     }
+    //get all contacts
     const allContacts = useContacts();
+    //get the socket 
+    const socket = useSocket();
+
 
     //add new recipient property to each conversation in conversations
+    console.log(conversations);
     const formatConversations = conversations.map((conver, index)=>{
         //format the contact to display on the page
         const recipient = conver.selectedUser.map((user)=>{
             const contact = allContacts.contacts.find(contact => {
                 if (contact.id === user){
                     return contact;
-                };
+                }
             })
-            const name = contact ?  contact.username : contact.id;
-            return {id: contact.id, username: name};
+            const name = contact ? contact.username : user;
+            return {id: user, username: name};
         })
         //format the message to display on the page (add fromMe + senderName props to each message object)
         const formatMessage = conver.message.map((mes)=>{
@@ -62,8 +68,9 @@ export default function ConversationProvider({id, children}) {
         return true;
     }
 
-    const addMessageToConversation = ({recipient, text, sender}) => {
+    const addMessageToConversation = useCallback(({recipient, text, sender}) => {
         //recipient = a list of user Id, text = text input,sender = user with current Id
+        console.log({recipient, text, sender});
         setConversations(prev => {
             let matchConversation = false;
             //each message just need the sender and the text content
@@ -79,12 +86,24 @@ export default function ConversationProvider({id, children}) {
                 return newConversations;
             }
             else{
-                return [...prev, {recipient, message: [newMessage]}]
+                return [...prev, {selectedUser: recipient, message: [newMessage]}]
             }
         })
-    }
+    }, [conversations, setConversations])
+    
+    //to control when to trigger socket on receive-message event
+    useEffect(() => {
+        if (socket == null) return;
+        socket.on('receive-message', addMessageToConversation);
+        console.log(conversations);              
+        return () => {
+            //remove all listeners in this receive-message event
+            socket.off('receive-message');
+        };
+    }, [socket, addMessageToConversation]);
 
     const sendMessage = (recipient,text) => {
+        socket.emit('send-message', {recipient, text});
         addMessageToConversation({recipient, text, sender: id});
     }
 

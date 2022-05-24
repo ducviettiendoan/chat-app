@@ -4,6 +4,7 @@ import Dashboard from './Dashboard';
 import useLocalStorage from '../customHooks/useLocalStorage';
 import ContactsProvider from './contexts/ContactsProvider';
 import ConversationProvider from './contexts/ConversationProvider';
+import SocketProvider from './SocketProvider';
 
 
 function App() {
@@ -12,11 +13,13 @@ function App() {
   console.log(id); 
   return (
     <div className="App">
-      {id ? <ContactsProvider>
-              <ConversationProvider id={id}>
-                <Dashboard id={id}/>
-              </ConversationProvider>
-            </ContactsProvider>
+      {id ? <SocketProvider id={id}>
+              <ContactsProvider>
+                <ConversationProvider id={id}>
+                  <Dashboard id={id}/>
+                </ConversationProvider>
+              </ContactsProvider>
+            </SocketProvider>
           : 
             <Login onIdSubmit = {setId}/>
       }
