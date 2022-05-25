@@ -10,7 +10,7 @@ export default function SocketProvider({id, children}) {
     const [socket, setSocket] = useState();
 
     useEffect(() => {
-        const newSocket = io("http://localhost:5000", {query: {id}});
+        const newSocket = io("https://young-scrubland-17050.herokuapp.com/", {query: {id}});
         setSocket(newSocket);
         //each time call io() -> create a new Socket instance => close everytime update socket -> reduce the amount of 
         //sockets that connected to the server
