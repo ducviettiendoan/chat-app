@@ -13,6 +13,7 @@ export const useConversation = () => {
 export default function ConversationProvider({id, children}) {
     const [conversations, setConversations] = useLocalStorage('conversations', []);
     const [selectedConversationIndex, setSelectedConversationIndex] = React.useState(0);
+    const [newestSender, setNewestSender] = React.useState();
     //storing a new Contact the the state contacts
     const createConversation = (selectedUser) => {
         setConversations(prev => [...prev, {selectedUser, message: []}]);
@@ -75,6 +76,7 @@ export default function ConversationProvider({id, children}) {
             let matchConversation = false;
             //each message just need the sender and the text content
             const newMessage = {sender, text};
+            setNewestSender(sender);
             let newConversations = conversations.map((conver) => {
                 if (matchRecipient(conver.selectedUser, recipient)){
                     matchConversation = true;
@@ -95,7 +97,6 @@ export default function ConversationProvider({id, children}) {
     useEffect(() => {
         if (socket == null) return;
         socket.on('receive-message', addMessageToConversation);
-        console.log(conversations);              
         return () => {
             //remove all listeners in this receive-message event
             socket.off('receive-message');
@@ -118,7 +119,9 @@ export default function ConversationProvider({id, children}) {
         //create new conversation
         createConversation,
         //to store a message to the conversation
-        sendMessage
+        sendMessage,
+        //keep track with the newest sender
+        newestSender
     }
 
     return (
