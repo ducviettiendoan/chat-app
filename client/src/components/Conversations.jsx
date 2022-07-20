@@ -27,7 +27,6 @@ export default function Conversations() {
     cons.setSelectedConversationIndex(i);
   } 
 
-  console.log(cons);
   const displayNoneNewestSender =  () => {
     return cons && cons.conversations.map((conver, index) => {
       return(

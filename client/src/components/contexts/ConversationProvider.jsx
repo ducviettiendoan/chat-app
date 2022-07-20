@@ -96,6 +96,10 @@ export default function ConversationProvider({id, children}) {
     //to control when to trigger socket on receive-message event
     useEffect(() => {
         if (socket == null) return;
+        //in the server it has .emit('receive-message') and it's triggered already when sendMessage is called
+        //when sendMessage is called -> addMessageToConversation is called and socket will be change since 
+        //an unique user id is used to send a message to another user (useEffect in SocketProvider get called)
+        //after those process -> on('receive-message') get called 
         socket.on('receive-message', addMessageToConversation);
         return () => {
             //remove all listeners in this receive-message event
@@ -103,7 +107,9 @@ export default function ConversationProvider({id, children}) {
         };
     }, [socket, addMessageToConversation]);
 
+    //this function will trigger the .on('send-message') since it has .emit('send-message')
     const sendMessage = (recipient,text) => {
+        //pass recipeint and text as params since .on('send-message') requires
         socket.emit('send-message', {recipient, text});
         addMessageToConversation({recipient, text, sender: id});
     }
